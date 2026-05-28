@@ -7,37 +7,39 @@ if (!process.env.REDIS_URL) {
   throw new Error("REDIS_URL is not defined");
 }
 
-export const redis = new Redis(process.env.REDIS_URL, {
+// For direct use (ping, cache, etc.)
+export const redisClient = new Redis(process.env.REDIS_URL, {
   maxRetriesPerRequest: null,
 });
 
+// For BullMQ queues and workers (plain object, avoids ioredis version conflict)
+export const redis = {
+  url: process.env.REDIS_URL,
+};
 
-
-
-redis.on("connect", () => {
-  console.log("🔌 Redis connecting...");
+redisClient.on("connect", () => {
+  console.log("Redis connecting...");
 });
 
-redis.on("ready", () => {
+redisClient.on("ready", () => {
   console.log("Redis is ready to use");
 });
 
-redis.on("error", (err) => {
+redisClient.on("error", (err) => {
   console.log("Redis error:", err.message);
 });
 
-redis.on("close", () => {
-  console.log(" Redis connection closed");
+redisClient.on("close", () => {
+  console.log("Redis connection closed");
 });
-
 
 (async () => {
   try {
-    const res = await redis.ping();
+    const res = await redisClient.ping();
     console.log("Redis PING:", res);
   } catch (err: any) {
-    console.log("Redis PING failed:", err.message);
+    console.log(" Redis PING failed:", err.message);
   }
 })();
 
-export default redis;
+export default redisClient;
