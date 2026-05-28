@@ -70,7 +70,7 @@ Socket.io (Real-time updates)
 
 ## Setup Instructions
 
-git clone https://github.com/your-username/vedaai.git
+git clone https://github.com/keshavSinghania/VEDA-AI.git
 cd vedaai
 
 # install all dependencies
