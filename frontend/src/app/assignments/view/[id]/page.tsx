@@ -40,7 +40,8 @@ type Assignment = {
 };
 
 export default function ViewAssignmentPage() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
 
   const [loading, setLoading] = useState(true);
   const [assignment, setAssignment] =
